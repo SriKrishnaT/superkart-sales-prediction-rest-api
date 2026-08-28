@@ -55,6 +55,8 @@ def predict_sales():
 
     # Make prediction
     predicted_sales = model.predict(input_data)[0]
+    # Ensure predictions are non-negative
+    predicted_sales = np.maximum(0, predicted_sales)
 
     # Return the predicted sales, rounded for better display
     return jsonify({'Predicted Sales (in dollars)': round(float(predicted_sales), 2)})
@@ -87,7 +89,9 @@ def predict_sales_batch():
     ]]
 
     # Make predictions
-    predicted_sales = model.predict(features_for_prediction).tolist()
+    predicted_sales = model.predict(features_for_prediction)
+    # Ensure predictions are non-negative
+    predicted_sales = np.maximum(0, predicted_sales).tolist()
 
     # Return the predictions list, rounded for better display
     return jsonify({'Predicted Sales (in dollars)': [round(float(s), 2) for s in predicted_sales]})
